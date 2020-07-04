@@ -1,5 +1,6 @@
 syntax on
 set nu
+set relativenumber
 set noswapfile
 set nobackup
 set smartindent
