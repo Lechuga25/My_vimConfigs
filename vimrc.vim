@@ -11,6 +11,7 @@ set completeopt-=preview
 set modelines=0
 set ruler
 set encoding=utf-8
+set cmdheight=1
 
 
 """""""""""""""""
@@ -93,6 +94,13 @@ let g:startify_lists = [
           \ ]
 " Erases startify header
 let g:startify_custom_header = []
+
+
+
+" Make <CR> auto-select the first completion item and notify coc.nvim to
+" format on enter, <cr> could be remapped by other vim plugin
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 
 
