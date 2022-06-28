@@ -6,12 +6,18 @@ set nu
 set relativenumber
 set noswapfile
 set nobackup
-set smartindent
 set completeopt-=preview
 set modelines=0
 set ruler
 set encoding=utf-8
+set updatetime=300
 set cmdheight=1
+"tab to 2 spaces
+set smartindent
+set tabstop=2
+set expandtab
+set shiftwidth=2
+
 
 
 """""""""""""""""
@@ -67,6 +73,23 @@ nnoremap <silent> <space>gb <CR>
 nnoremap <silent> <F5> :UndotreeToggle <CR>
 " <leader> cc: Comments current line or selected line
 " <leader> cu: Uncomments current line or selected line
+
+
+
+"""""""""""""""""
+" Move through tabs
+"""""""""""""""""
+map <leader>t :tabnew file <CR>
+noremap <leader>1 1gt
+noremap <leader>2 2gt
+noremap <leader>3 3gt
+noremap <leader>4 4gt
+noremap <leader>5 5gt
+noremap <leader>6 6gt
+noremap <leader>7 7gt
+noremap <leader>8 8gt
+noremap <leader>9 9gt
+noremap <leader>0 :tablast<cr>
 
 
 
