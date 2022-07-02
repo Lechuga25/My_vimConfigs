@@ -48,6 +48,9 @@ Plug 'mhinz/vim-startify'
 Plug 'liuchengxu/vim-which-key'
 "Easy commenter
 Plug 'preservim/nerdcommenter'
+
+"Better js sintax highlight
+Plug 'yuesk/vim-js'
 call plug#end()
 
 
@@ -74,6 +77,9 @@ nnoremap <silent> <F5> :UndotreeToggle <CR>
 " <leader> cc: Comments current line or selected line
 " <leader> cu: Uncomments current line or selected line
 
+" Terminal get to normal mode
+tnoremap <Esc> <C-/><C-n>
+tnoremap jj <C-/><C-n>
 
 
 """""""""""""""""
