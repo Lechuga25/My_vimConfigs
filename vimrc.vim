@@ -3,6 +3,7 @@
 """""""""""""""""
 syntax on
 set nu
+set splitright " Splits to the right
 set relativenumber
 set noswapfile
 set nobackup
@@ -15,9 +16,9 @@ set cmdheight=1
 "tab to 2 spaces
 set smartindent
 set tabstop=2
-set expandtab
+set expandtab " space characters instead of tab
 set shiftwidth=2
-
+set mouse=a " Activates mouse, use it if you are afraid
 
 
 """""""""""""""""
@@ -48,11 +49,13 @@ Plug 'mhinz/vim-startify'
 Plug 'liuchengxu/vim-which-key'
 "Easy commenter
 Plug 'preservim/nerdcommenter'
-
-"Better js sintax highlight
-Plug 'yuesk/vim-js'
+" Better js sintax highlight
+Plug 'yuezk/vim-js'
+" Indent lines
+Plug 'Yggdroot/indentLine'
+" Debugger / not configured yet
+Plug 'puremourning/vimspector'
 call plug#end()
-
 
 
 """""""""""""""""
@@ -68,19 +71,30 @@ set background=dark
 """"""""""""""""
 let mapleader = " "
 map <leader>n :NERDTreeToggle <CR>
-map <leader>t :tabnew file <CR>
 nnoremap <silent> <leader>fs <CR>
 inoremap jj <esc>
 " nnoremap <silent> <space>gd :YcmCompleter GoTo<CR>
 nnoremap <silent> <space>gb <CR> 
 nnoremap <silent> <F5> :UndotreeToggle <CR>
+" Stop search
+map <leader>h :nohlsearch <CR>
 " <leader> cc: Comments current line or selected line
 " <leader> cu: Uncomments current line or selected line
 
-" Terminal get to normal mode
-tnoremap <Esc> <C-/><C-n>
-tnoremap jj <C-/><C-n>
+" Move split to a new tab
+map <leader>m <C-w>T
+"Move split to right
+map <leader>mh <C-w>H
+"Move split to left
+map <leader>ml <C-w>L
+" Move split to down
+map <leader>mj <C-w>J
+" Move splig to up
+map <leader>mk <C-w>K
 
+" Terminal get to normal mode
+tnoremap <Esc> <C-\><C-n> 
+tnoremap jj <C-\><C-n>
 
 """""""""""""""""
 " Move through tabs
@@ -98,11 +112,10 @@ noremap <leader>9 9gt
 noremap <leader>0 :tablast<cr>
 
 
-
 """""""""""""""
-"Spell check
+" Spell check
 """""""""""""""
-map <F6> :setlocal spell! spelllang=en_us<CR>
+map <F2> :setlocal spell! spelllang=en_us<CR>
 set splitbelow splitright
 map <C-h> <C-w>h
 map <C-j> <C-w>j
@@ -125,13 +138,35 @@ let g:startify_lists = [
 let g:startify_custom_header = []
 
 
-
 " Make <CR> auto-select the first completion item and notify coc.nvim to
 " format on enter, <cr> could be remapped by other vim plugin
 inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
                               \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 
+""""""""""""""""""""
+"Debugger configuration. 
+""""""""""""""""""""
+let g:vimspector_enable_mappings = 'HUMAN'
+map <leader>qi <Plug>VimspectorStepInto 
+map <leader>qo <Plug>VimspectorStepOver
+map <leader>qO <Plug>VimspectorStepOut
+
+" for normal mode - the word under the cursor
+nmap <Leader>di <Plug>VimspectorBalloonEval
+" for visual mode, the visually selected text
+xmap <Leader>di <Plug>VimspectorBalloonEval
+nmap <LocalLeader><F11> <Plug>VimspectorUpFrame
+nmap <LocalLeader><F12> <Plug>VimspectorDownFrame
+" Changing default signs
+sign define vimspectorBP text=o             texthl=WarningMsg
+sign define vimspectorBPCond text=o?        texthl=WarningMsg
+sign define vimspectorBPLog text=!!         texthl=SpellRare
+sign define vimspectorBPDisabled text=o!    texthl=LineNr
+sign define vimspectorPC text=\ >           texthl=MatchParen
+sign define vimspectorPCBP text=o>          texthl=MatchParen
+sign define vimspectorCurrentThread text=>  texthl=MatchParen
+sign define vimspectorCurrentFrame text=>   texthl=Special
 
 """"""""""""""""""""""""""
 " COC map configuration
@@ -161,7 +196,6 @@ nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
 
-
 """""""""""""""""""""""""""""""""""""""""""""""""
 " Use K to show documentation in preview window.
 """""""""""""""""""""""""""""""""""""""""""""""""
@@ -174,7 +208,6 @@ function! ShowDocumentation()
     call feedkeys('K', 'in')
   endif
 endfunction
-
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -200,11 +233,11 @@ augroup mygroup
 augroup end
 
 
-
 """""""""""""""""""""""""""""""""""""""""""""""""
 " Run the Code Lens action on the current line.
 """""""""""""""""""""""""""""""""""""""""""""""""
-nmap <leader>cl  <Plug>(coc-codelens-action)
+
+nmap <leader>ci  <Plug>(coc-codelens-action)
 
 " Add `:Format` command to format current buffer.
 command! -nargs=0 Format :call CocActionAsync('format')
