@@ -66,6 +66,7 @@ call plug#end()
 """""""""""""""""
 " Color scheme 
 """""""""""""""""
+let g:gruvbox_invert_selection = 0
 colorscheme gruvbox
 set background=dark
 hi Visual cterm=NONE ctermfg=NONE ctermbg=237 guibg=#3a3a3a
