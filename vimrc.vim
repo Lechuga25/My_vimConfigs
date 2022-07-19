@@ -10,7 +10,8 @@ set nobackup
 set completeopt-=preview
 set modelines=0
 set ruler
-set encoding=utf-8
+set encoding=UTF-8
+set termguicolors
 set updatetime=300
 set cmdheight=1
 "tab to 2 spaces
@@ -19,6 +20,8 @@ set tabstop=2
 set expandtab " space characters instead of tab
 set shiftwidth=2
 set mouse=a " Activates mouse, use it if you are afraid
+highlight ColorColumn ctermbg=DarkCyan
+call matchadd('ColorColumn', '\%81v', 100)
 
 
 """""""""""""""""
@@ -29,7 +32,7 @@ call plug#begin('~/.vim/plugged')
 Plug 'omnisharp/omnisharp-vim'
 Plug 'tpope/vim-fugitive'
 " Gruvbox theme
-Plug 'morhetz/gruvbox'
+Plug 'gruvbox-community/gruvbox'
 " Nav panel
 Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/syntastic'
@@ -51,9 +54,11 @@ Plug 'liuchengxu/vim-which-key'
 Plug 'preservim/nerdcommenter'
 " Better js sintax highlight
 Plug 'yuezk/vim-js'
+" Better ruby highlight
+Plug 'vim-ruby/vim-ruby'
 " Indent lines
 Plug 'Yggdroot/indentLine'
-" Debugger / not configured yet
+" Debugger / not fully configured yet
 Plug 'puremourning/vimspector'
 call plug#end()
 
@@ -63,6 +68,7 @@ call plug#end()
 """""""""""""""""
 colorscheme gruvbox
 set background=dark
+hi Visual cterm=NONE ctermfg=NONE ctermbg=237 guibg=#3a3a3a
 
 
 
@@ -73,9 +79,9 @@ let mapleader = " "
 map <leader>n :NERDTreeToggle <CR>
 nnoremap <silent> <leader>fs <CR>
 inoremap jj <esc>
-" nnoremap <silent> <space>gd :YcmCompleter GoTo<CR>
 nnoremap <silent> <space>gb <CR> 
 nnoremap <silent> <F5> :UndotreeToggle <CR>
+nnoremap <C-s> :w <CR>
 " Stop search
 map <leader>h :nohlsearch <CR>
 " <leader> cc: Comments current line or selected line
@@ -121,6 +127,13 @@ map <C-h> <C-w>h
 map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
+
+
+
+""""""""""""""
+" Commands
+""""""""""""""
+command! Html :0r $HOME/.vim/templates/skeleton.html
 
 
 
@@ -195,6 +208,11 @@ nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
+""""""""""""""""""""""""""""""""""""
+" CoC ruby
+""""""""""""""""""""""""""""""""""""
+let g:coc_global_extensions = ['coc-solargraph']
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""
 " Use K to show documentation in preview window.
@@ -263,3 +281,4 @@ nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
 nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
+
