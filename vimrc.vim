@@ -3,23 +3,30 @@
 """""""""""""""""
 syntax on
 set nu
-set splitright " Splits to the right
-set relativenumber
-set noswapfile
-set nobackup
+set splitright          " Splits to the right
+set relativenumber      " Sets left line number display to relative
+set noswapfile          " No swap file
+set nobackup            " No backup
 set completeopt-=preview
 set modelines=0
 set ruler
 set encoding=UTF-8
-set termguicolors
+set termguicolors       " Set colors / if not set colors may change
 set updatetime=300
-set cmdheight=1
+set cmdheight=1         " comand line height set to 1
+
 "tab to 2 spaces
 set smartindent
 set tabstop=2
-set expandtab " space characters instead of tab
+set expandtab           " space characters instead of tab
 set shiftwidth=2
-set mouse=a " Activates mouse, use it if you are afraid
+set mouse=a             " Activates mouse, use it if you are afraid
+
+filetype on
+filetype indent on
+filetype plugin on
+
+" highlight characters over 100 character limit
 highlight ColorColumn ctermbg=DarkCyan
 call matchadd('ColorColumn', '\%81v', 100)
 
@@ -28,66 +35,63 @@ call matchadd('ColorColumn', '\%81v', 100)
 " Plugins here
 """""""""""""""""
 call plug#begin('~/.vim/plugged')
-" Plug 'valloric/youcompleteme'
-Plug 'omnisharp/omnisharp-vim'
-Plug 'tpope/vim-fugitive'
-" Gruvbox theme
-Plug 'gruvbox-community/gruvbox'
-" Nav panel
-Plug 'scrooloose/nerdtree'
-Plug 'scrooloose/syntastic'
-" Bottom command line improved
-Plug 'vim-airline/vim-airline'
-" Finder
-Plug 'junegunn/fzf', { 'do' : { -> fzf#install() } }
-" Undo tree
-Plug 'mbbill/undotree'
-" Autocomplete
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-" Format js and html files
-Plug 'maksimr/vim-jsbeautify'
-" Start screen
-Plug 'mhinz/vim-startify'
-" Key binding helper
-Plug 'liuchengxu/vim-which-key'
-"Easy commenter
-Plug 'preservim/nerdcommenter'
-" Better js sintax highlight
-Plug 'yuezk/vim-js'
-" Better ruby highlight
-Plug 'vim-ruby/vim-ruby'
-" Indent lines
-Plug 'Yggdroot/indentLine'
-" Debugger / not fully configured yet
-Plug 'puremourning/vimspector'
+Plug 'tpope/vim-fugitive'         " Git
+Plug 'gruvbox-community/gruvbox'  " Gruvbox theme
+Plug 'scrooloose/nerdtree'        " Nav panel
+Plug 'scrooloose/syntastic'       " Syntax checking
+Plug 'vim-airline/vim-airline'    " Bottom command line improved
+Plug 'mbbill/undotree'            " Undo tree
+Plug 'maksimr/vim-jsbeautify'     " Format js and html files
+Plug 'mhinz/vim-startify'         " Start screen
+Plug 'liuchengxu/vim-which-key'   " Key binding helper
+Plug 'preservim/nerdcommenter'    "Easy commenter
+Plug 'yuezk/vim-js'               " Better js sintax highlight
+Plug 'vim-ruby/vim-ruby'          " Better ruby sintax highlight
+Plug 'ngmy/vim-rubocop'           " Ruby rubocop
+Plug 'Yggdroot/indentLine'        " Easy indent
+Plug 'puremourning/vimspector'    " Debugger / TODO: configure
+Plug 'junegunn/fzf', { 'do' : { -> fzf#install() } }  " Fuzzy finder 
+Plug 'neoclide/coc.nvim', {'branch': 'release'}       " Autocomplete
 call plug#end()
 
 
 """""""""""""""""
 " Color scheme 
 """""""""""""""""
-let g:gruvbox_invert_selection = 0
-colorscheme gruvbox
-set background=dark
+let g:gruvbox_invert_selection = 0    " No weird background colors in visual mode
+let g:gruvbox_contrast_dark = 'hard'  " Darker background
+colorscheme gruvbox                   " User Gruvbox colorscheme
+set background=dark                   " Dark background as default
+" Visual mode better less bright highlight
 hi Visual cterm=NONE ctermfg=NONE ctermbg=237 guibg=#3a3a3a
 
+" Ruby sintax config
+let ruby_operators = 1
+let ruby_pseudo_operators = 1
 
 
 """"""""""""""""
 " key mapping
 """"""""""""""""
-let mapleader = " "
-map <leader>n :NERDTreeToggle <CR>
+let mapleader = " "                   " Space bar as <leader> key
+map <leader>n :NERDTreeToggle <CR> 
 nnoremap <silent> <leader>fs <CR>
 inoremap jj <esc>
-nnoremap <silent> <space>gb <CR> 
-nnoremap <silent> <F5> :UndotreeToggle <CR>
-nnoremap <C-s> :w <CR>
+nnoremap <silent> <leader><F4> :UndotreeToggle <CR>
+nnoremap <leader>fs :w <CR>
+" Fuzzy finder
+nnoremap <leader>F :FZF <CR>
 " Stop search
 map <leader>h :nohlsearch <CR>
 " <leader> cc: Comments current line or selected line
 " <leader> cu: Uncomments current line or selected line
+let g:vimrubocop_keymap = 0
+nmap <Leader>r :RuboCop<CR>
 
+
+""""""""""""""""
+" Splits
+"""""""""""""""
 " Move split to a new tab
 map <leader>m <C-w>T
 "Move split to right
@@ -102,6 +106,7 @@ map <leader>mk <C-w>K
 " Terminal get to normal mode
 tnoremap <Esc> <C-\><C-n> 
 tnoremap jj <C-\><C-n>
+
 
 """""""""""""""""
 " Move through tabs
@@ -130,26 +135,24 @@ map <C-k> <C-w>k
 map <C-l> <C-w>l
 
 
-
 """"""""""""""
 " Commands
 """"""""""""""
+
+" Populate the file with the html tamplate.
 command! Html :0r $HOME/.vim/templates/skeleton.html
 
 
-
 """"""""""""""""""""""""""""""""""""""""
-" Bookmarks. Syntax is clear.add yours
+" Bookmarks.
 """"""""""""""""""""""""""""""""""""""""
-" let g:startify_bookmarks = [ {'I': '~/i3/i3/config'},{'L': '~/.blerc'},{'Z': '~/.zshrc'},{'B': '~/.bashrc'},{'V': '~/.vimrc'}]
 let g:startify_lists = [
           \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
           \ { 'type': 'files',     'header': ['   Recent'  ]       },
           \ { 'type': 'sessions',  'header': ['   Sessions']       },
           \ { 'type': 'commands',  'header': ['   Commands']       },
           \ ]
-" Erases startify header
-let g:startify_custom_header = []
+let g:startify_custom_header = []             " Erases startify header
 
 
 " Make <CR> auto-select the first completion item and notify coc.nvim to
@@ -161,8 +164,8 @@ inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
 """"""""""""""""""""
 "Debugger configuration. 
 """"""""""""""""""""
-let g:vimspector_enable_mappings = 'HUMAN'
-map <leader>qi <Plug>VimspectorStepInto 
+let g:vimspector_enable_mappings = 'HUMAN'        " TODO: Configure mappings
+map <leader>qi <Plug>VimspectorStepInto
 map <leader>qo <Plug>VimspectorStepOver
 map <leader>qO <Plug>VimspectorStepOut
 
@@ -172,7 +175,7 @@ nmap <Leader>di <Plug>VimspectorBalloonEval
 xmap <Leader>di <Plug>VimspectorBalloonEval
 nmap <LocalLeader><F11> <Plug>VimspectorUpFrame
 nmap <LocalLeader><F12> <Plug>VimspectorDownFrame
-" Changing default signs
+" Changing default signs to characters
 sign define vimspectorBP text=o             texthl=WarningMsg
 sign define vimspectorBPCond text=o?        texthl=WarningMsg
 sign define vimspectorBPLog text=!!         texthl=SpellRare
@@ -181,6 +184,7 @@ sign define vimspectorPC text=\ >           texthl=MatchParen
 sign define vimspectorPCBP text=o>          texthl=MatchParen
 sign define vimspectorCurrentThread text=>  texthl=MatchParen
 sign define vimspectorCurrentFrame text=>   texthl=Special
+
 
 """"""""""""""""""""""""""
 " COC map configuration
@@ -209,6 +213,7 @@ nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
+
 """"""""""""""""""""""""""""""""""""
 " CoC ruby
 """"""""""""""""""""""""""""""""""""
@@ -234,8 +239,6 @@ endfunction
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
-
-
 " Symbol renaming.
 nmap <leader>rn <Plug>(coc-rename)
 
@@ -255,7 +258,6 @@ augroup end
 """""""""""""""""""""""""""""""""""""""""""""""""
 " Run the Code Lens action on the current line.
 """""""""""""""""""""""""""""""""""""""""""""""""
-
 nmap <leader>ci  <Plug>(coc-codelens-action)
 
 " Add `:Format` command to format current buffer.
@@ -282,4 +284,3 @@ nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
 nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
-
