@@ -2,15 +2,20 @@
 " Basic configuration
 """""""""""""""""
 syntax on
-set nu
-set splitright          " Splits to the right
-set relativenumber      " Sets left line number display to relative
+set nu                  " Left number column
+set relativenumber      " Sets number column display to relative
 set noswapfile          " No swap file
 set nobackup            " No backup
+
+set wrap                " Wrap lines in multiple lines
+set linebreak           " line overflow doesn't break words
+" set nolist            " set this if the above isn't working properly
+
 set completeopt-=preview
-set modelines=0
+set modelines=0         " Disables modelines (for security vulnerabilities)
+set nomodeline          " Disables modeline parser
 set ruler
-set encoding=UTF-8
+set encoding=UTF-8      " Encoding to UTF-8
 set termguicolors       " Set colors / if not set colors may change
 set updatetime=300
 set cmdheight=1         " comand line height set to 1
@@ -20,7 +25,8 @@ set smartindent
 set tabstop=2
 set expandtab           " space characters instead of tab
 set shiftwidth=2
-set mouse=a             " Activates mouse, use it if you are afraid
+
+set mouse=a             " Activates mouse, use it if you are weak
 
 filetype on
 filetype indent on
@@ -41,41 +47,62 @@ Plug 'scrooloose/nerdtree'        " Nav panel
 Plug 'scrooloose/syntastic'       " Syntax checking
 Plug 'vim-airline/vim-airline'    " Bottom command line improved
 Plug 'mbbill/undotree'            " Undo tree
-Plug 'maksimr/vim-jsbeautify'     " Format js and html files
 Plug 'mhinz/vim-startify'         " Start screen
 Plug 'liuchengxu/vim-which-key'   " Key binding helper
-Plug 'preservim/nerdcommenter'    "Easy commenter
-Plug 'yuezk/vim-js'               " Better js sintax highlight
-Plug 'vim-ruby/vim-ruby'          " Better ruby sintax highlight
-Plug 'ngmy/vim-rubocop'           " Ruby rubocop
+Plug 'preservim/nerdcommenter'    " Easy commenter
 Plug 'Yggdroot/indentLine'        " Easy indent
 Plug 'puremourning/vimspector'    " Debugger / TODO: configure
-Plug 'junegunn/fzf', { 'do' : { -> fzf#install() } }  " Fuzzy finder 
+Plug 'junegunn/fzf', { 'do' : { -> fzf#install() } }  " Fuzzy finder
 Plug 'neoclide/coc.nvim', {'branch': 'release'}       " Autocomplete
+
+" Neovim specifics
+Plug 'nvim-lua/plenary.nvim'      " Lua Scripts ()
+Plug 'folke/todo-comments.nvim'   " Highlight TODO:/FIXME/NOTE/
+
+" Optionals
+Plug 'vim-ruby/vim-ruby'          " Better ruby sintax highlight
+Plug 'ngmy/vim-rubocop'           " Ruby rubocop
+Plug 'maksimr/vim-jsbeautify'     " Format js and html files
+Plug 'yuezk/vim-js'               " Better js sintax highlight
 call plug#end()
 
 
 """""""""""""""""
-" Color scheme 
+" Color scheme
 """""""""""""""""
 let g:gruvbox_invert_selection = 0    " No weird background colors in visual mode
 let g:gruvbox_contrast_dark = 'hard'  " Darker background
 colorscheme gruvbox                   " User Gruvbox colorscheme
 set background=dark                   " Dark background as default
+
 " Visual mode better less bright highlight
 hi Visual cterm=NONE ctermfg=NONE ctermbg=237 guibg=#3a3a3a
+
+
+""""""""""""""""
+" highlight setings
+""""""""""""""""
+
+" NOTE: Remove this if you are not using neovim
+lua << EOF
+require ("todo-comments").setup{
+      \ signs = false,
+      \ highlight = {
+        \   keyword = "fg"
+        \ }
+        \ }
+EOF
 
 " Ruby sintax config
 let ruby_operators = 1
 let ruby_pseudo_operators = 1
 
-
 """"""""""""""""
 " key mapping
 """"""""""""""""
 let mapleader = " "                   " Space bar as <leader> key
-map <leader>n :NERDTreeToggle <CR> 
-nnoremap <silent> <leader>fs <CR>
+map <leader>n :NERDTreeToggle <CR>
+nnoremap <silent> <leader>fs :w<CR>
 inoremap jj <esc>
 nnoremap <silent> <leader><F4> :UndotreeToggle <CR>
 nnoremap <leader>fs :w <CR>
@@ -100,8 +127,21 @@ map <leader>mh <C-w>H
 map <leader>ml <C-w>L
 " Move split to down
 map <leader>mj <C-w>J
-" Move splig to up
+" Move split to up
 map <leader>mk <C-w>K
+
+" Move through splits
+map <leader>wl <C-w>l
+map <leader>wh <C-w>h
+map <leader>wk <C-w>k
+map <leader>wj <C-w>j
+
+" Create splits
+map <leader>wv :vsplit <CR>
+map <leader>ws :split <CR>
+
+" Close (w/o saving) tab / split / buffer
+map <leader>qq :q <CR>
 
 " Terminal get to normal mode
 tnoremap <Esc> <C-\><C-n> 
@@ -138,14 +178,13 @@ map <C-l> <C-w>l
 """"""""""""""
 " Commands
 """"""""""""""
-
 " Populate the file with the html tamplate.
 command! Html :0r $HOME/.vim/templates/skeleton.html
 
 
-""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""
 " Bookmarks.
-""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""
 let g:startify_lists = [
           \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
           \ { 'type': 'files',     'header': ['   Recent'  ]       },
@@ -284,3 +323,5 @@ nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
 nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
+
+
